@@ -24,7 +24,7 @@ body {
   font-size: 1em;
 }
 
-.title {
+.mainTitle {
   position: absolute;
   z-index: 2;
   text-align: left;
