@@ -145,12 +145,12 @@ function chartLine1(svg) {
 
  
   // add triangles
-  g.selectAll('.triangles').data(triData)
-    .join( enter => enter.append('path')
-      .attr('d', triD)
-      .attr('transform', (d, i) => `translate(${width/2 + 50 - (100 * i)},${height - padTop})`)
-      )
-    .attr('fill', c1)
+  // g.selectAll('.triangles').data(triData)
+  //   .join( enter => enter.append('path')
+  //     .attr('d', triD)
+  //     .attr('transform', (d, i) => `translate(${width/2 + 50 - (100 * i)},${height - padTop})`)
+  //     )
+  //   .attr('fill', c1)
 
 
 
