@@ -1,4 +1,5 @@
-const d_quarterlyRevenue = [
+function chart2Data() {
+  return [  
   {
     year: 'Q1 17',
     value: Math.floor(Math.random()*1000),
@@ -65,12 +66,13 @@ const d_quarterlyRevenue = [
     income: Math.floor(Math.random()*250)
   }
 ]
+}
 
 
 function chartLine2(svg) {
 
   // variables 
-  data = d_quarterlyRevenue;
+  data = chart2Data();
 
   width = +svg.style('width').slice(0, -2),
   height = +svg.style('height').slice(0, -2),
@@ -179,24 +181,24 @@ function chartLine2(svg) {
     .style('stroke-width', 2)
 
   // add data line
-  let income1 = bg.selectAll('.clip-path')
+  let income1 = bg.selectAll('.lines')
   .data([data])
-  .join('clip-path')
+  .join('path')
   .attr('id', 'incomeLine1')
   .join('path')
   .attr('d', secondLine)
-  .style('fill', 'red')
+  .style('fill', 'none')
   .style('stroke', 'white')
   .style('stroke-width', 2)
 
-  let incomeMask1 = bg.selectAll('incomeLine1')
-    .data([null])
-    .join('rect')
-    .attr('y', 0)
-    .attr('clip-path', 'url(#incomeLine1)')
-    .attr('width', width)
-    .attr('height', y2(175))
-    .style('fill', 'green')
+  // let incomeMask1 = bg.selectAll('incomeLine1')
+  //   .data([null])
+  //   .join('rect')
+  //   .attr('y', 0)
+  //   .attr('clip-path', 'url(#incomeLine1)')
+  //   .attr('width', width)
+  //   .attr('height', y2(175))
+  //   .style('fill', 'green')
     
 
 

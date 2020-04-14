@@ -1,17 +1,19 @@
-const d_yearlyRevenue = [
+function d_yearlyRevenue() {
+  return [
   {
     year: 2017,
-    value: 12093
+    value: Math.floor(Math.random()*1000+10000)
   },
   {
     year: 2018,
-    value: 11000
+    value: Math.floor(Math.random()*1000+10000)
   },
   {
     year: 2019,
-    value: 10531
+    value: Math.floor(Math.random()*5000+10000)
   }
 ]
+}
 
 triData = [
   { 
@@ -30,7 +32,7 @@ function chartLine1(svg) {
 
   // variables 
 
-  data = d_yearlyRevenue;
+  data = d_yearlyRevenue();
 
   width = +svg.style('width').slice(0, -2),
   height = +svg.style('height').slice(0, -2),
