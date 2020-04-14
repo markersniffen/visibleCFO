@@ -16,8 +16,6 @@ let d3div = [
   d3.select('#d5')
 ];
 
-// I REALIZED THE STUPID ._groups[0][0] THING.....
-
 function myResponsiveComponent(container, props) {
   // add the svg
   let svg = container.selectAll('svg').data([null]);
@@ -30,6 +28,12 @@ function myResponsiveComponent(container, props) {
         .attr('viewbox', `0 0 ${props.width} ${props.height}`)
 }
 
+function updateData() {
+  d_healthScore = d_healthScoreGen();
+  d_quarterlyRevenue = d_quarterlyRevenueGen();
+  d_yearlyRevenue = d_yearlyRevenueGen();
+}
+
 function prepSVG() {
   // go through each div 
   div.forEach( (d, i) => {
@@ -40,24 +44,28 @@ function prepSVG() {
 
 function setup() {
   arcSetup();
-  arcDraw();
+  arcDraw(d3.select('#svg_d0'));
   chartLine1(d3.select('#svg_d1'));
   chartLine2(d3.select('#svg_d2'));
 }
 
 function render() {
-  arcDraw();
   chartLine1(d3.select('#svg_d1'));
   chartLine2(d3.select('#svg_d2'));
 
 }
 
+function updateRender() {
+  updateData();
+  arcDraw();
+  render();
+}
 
+arcDraw(d3.select('#svg_d0'));
 prepSVG();
+updateData();
 setup();
 render();
-
-
 
 window.addEventListener('resize', render);
 

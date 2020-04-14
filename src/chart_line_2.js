@@ -1,78 +1,10 @@
-function chart2Data() {
-  return [  
-  {
-    year: 'Q1 17',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q2 17',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q3 17',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q4 17',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q1 18',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q2 18',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q3 18',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q4 18',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q1 19',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q2 19',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q3 19',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q4 19',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  },
-  {
-    year: 'Q1 20',
-    value: Math.floor(Math.random()*1000),
-    income: Math.floor(Math.random()*250)
-  }
-]
-}
+
 
 
 function chartLine2(svg) {
 
   // variables 
-  data = chart2Data();
+  data = d_quarterlyRevenue;
 
   width = +svg.style('width').slice(0, -2),
   height = +svg.style('height').slice(0, -2),

@@ -1,11 +1,11 @@
-const arcVar = {
+arcVar = {
   startA: 140, // max angle of arc in degrees
   rad: [ 95, 120, 152, 185, 220 ], // radius of elements
   thick: [ 6, 0, 15, 1 ], // thickness of elements
 }
 
-function arcSetup(_div) {
-
+function arcSetup() {
+  console.log('inside arcSetup', d_healthScore)
   divVar = {
     width: 400,
     height: 250
@@ -13,6 +13,7 @@ function arcSetup(_div) {
 
   // create d0 svg element
   const svg_arc = d3.select('#d0').append('svg')
+    .attr('id', 'd0_svg')
     .attr('width', divVar.width)
     .attr('height', divVar.height)
 
@@ -36,16 +37,19 @@ function arcSetup(_div) {
     .endAngle(arcVar.startA * (Math.PI/180))
   )
   .style('fill', bc1)
+
+  
 }
 
 function arcDraw() {
-  console.log('running arcDraw()')
+
+  let data = d_healthScore;
     
   let arcScale = d3.scaleLinear()
-    .domain([0, d_healthScore[0].range])
+    .domain([0, data[0].range])
     .range ([-arcVar.startA, arcVar.startA]);
 
-  const arc = d3.arc()
+  let arc = d3.arc()
     .innerRadius(arcVar.rad[0] - arcVar.thick[0])
     .outerRadius(arcVar.rad[0] + arcVar.thick[0])
     .cornerRadius(10)
@@ -53,7 +57,7 @@ function arcDraw() {
     .endAngle(d => d * (Math.PI/180))// * (Math.PI/180)) //just radians
 
   // tween between this._current and current data arc
-  const arcTween = d => {
+  let arcTween = d => {
     let current = this.mainPath._groups[0][0]._current;  // is there a more elegant way to do this?
     console.log('>>>',current);
     let i = d3.interpolate( current, d );
@@ -62,20 +66,21 @@ function arcDraw() {
   }
 
   // manually tween between an 'empty' arc and current data arc
-  const arcTween2 = d => {
+  let arcTween2 = d => {
     let i = d3.interpolate( -arcVar.startA, d );
     return function(t) { return arc(i(t)); };
   }
 
   // create random data
-  d_healthScore.value = Math.random()*100;
   
+  data.value = Math.random()*100;
+
   let mainPathGroup = d3.select('#arc_center').selectAll('g').data([null])
     .join('g')
     .attr('id', 'mainPathGroup')
 
   mainPath = mainPathGroup.selectAll('path')
-    .data([arcScale(d_healthScore.value)])
+    .data([arcScale(data.value)])
     .join(
       enter => enter
         .append('path')   
@@ -91,6 +96,8 @@ function arcDraw() {
         .attrTween('d', arcTween)
         .style('fill', c1)     
       )
+
+  console.log(mainPath)
 }
 
 
