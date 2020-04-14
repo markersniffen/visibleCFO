@@ -1,0 +1,130 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: black;
+  color: white;
+  padding-left: 5%;
+  padding-right: 5%;
+  font-family: sans-serif;
+  text-align: center
+}
+
+.master {
+
+  display: inline;
+  
+}
+
+.head {
+  min-height: 200px;
+  text-align: center;
+  background-color: #151B26; 
+  font-size: 1em;
+}
+
+.title {
+  position: absolute;
+  z-index: 2;
+  text-align: left;
+  padding: 40px;
+}
+
+.grid-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  grid-gap: 8px;
+  background-color: #151B26;
+
+  max-height: 800px;
+
+  padding-top: 0px;
+  padding-bottom: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.grid-item {
+  background-color: #24273B;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+  text-align: center;
+  padding: 2px;
+  font-size: 30px;
+  grid-column: 2 / 5; 
+}
+
+.item0 {
+  position: relative;
+  top: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.item1 { grid-area: 1 / 1 / 11 / 2; }
+.item2 { grid-row: 1 / 4; }
+.item3 { grid-row: 4 / 6; }
+.item4 { grid-row: 6 / 8; }
+.item5 { grid-row: 8 / 11; }
+
+
+@media only screen and (max-width: 786px) {
+
+  .grid-item { 
+    grid-column: 1 / 4; 
+  }
+
+  .grid-container { grid-template-rows: repeat(11, 120);
+                    max-height: 1400px; }
+  .item1 { grid-row: 1 / 4; }
+  .item2 { grid-row: 4 / 7; }
+  .item3 { grid-row: 7 / 9; }
+  .item4 { grid-row: 9 / 10; }
+  .item5 { grid-row: 10 / 12; }
+
+  .title {
+    position: relative;
+  }
+
+  .item0 {
+    top: 0;
+  }
+}
+
+
+.title {
+  font-size: .5em;
+  text-anchor: middle;
+  fill: white;
+}
+
+.label1 {
+  font-size: .5em;
+  font-weight: bold;
+  text-anchor: middle;
+  alignment-baseline: central;
+  fill: white;
+}
+
+.label2 {
+  font-size: .4em;
+  text-anchor: middle;
+  alignment-baseline: central;
+  fill: white;
+}
+
+.tickTop {
+  font-size: .3em;
+}
+
+.tickRight {
+  font-size: .5em;
+}
+
+.tickBottom {
+  font-size: .3em;
+}
