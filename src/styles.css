@@ -60,7 +60,8 @@ body {
 
 .item0 {
   position: relative;
-  top: 40px;
+  height: 300px;
+  top: 0px;
   padding-left: 40px;
   padding-right: 40px;
 }
@@ -90,8 +91,12 @@ body {
     position: relative;
   }
 
+  .head {
+    height: 350px;
+  }
+
   .item0 {
-    top: 0;
+    top: 60px;
   }
 }
 
@@ -127,4 +132,18 @@ body {
 
 .tickBottom {
   font-size: .3em;
+}
+
+.mainArcTitle {
+  text-anchor: middle;
+  font-size:1em;
+  fill: white;
+}
+
+#mainArcData {
+  text-anchor: middle;
+  alignment-baseline: central;
+  font-size:4em;
+  font-weight: bold;
+  fill: white;
 }

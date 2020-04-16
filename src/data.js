@@ -3,12 +3,15 @@ const c1 = '#F37D7F', c2= '#FFCD6B', c3='#54C5EF', c4='#11B7A4';
 const bc1 = '151B26', bc2 = '24273B';
 c1
 
+const t = d3.transition()
+  .duration(400)
+
 function d_healthScoreGen() {
-  return [{
+  return {
     name: 'Health Score',
-    value: Math.floor(Math.random()*100),
+    value: Math.random()*100,
     range: 100
-  }]
+  }
 }
 
 
@@ -103,4 +106,5 @@ let d_healthScore = d_healthScoreGen();
 let d_quarterlyRevenue = d_quarterlyRevenueGen();
 let d_yearlyRevenue = d_yearlyRevenueGen();
 
+console.log(d_healthScore)
 

@@ -9,6 +9,7 @@ let div = [
 
 // select divs d3 way
 let d3div = [
+  d3.select('#d0'),
   d3.select('#d1'),
   d3.select('#d2'),
   d3.select('#d3'),
@@ -43,28 +44,24 @@ function prepSVG() {
 }
 
 function setup() {
-  arcSetup();
-  arcDraw(d3.select('#svg_d0'));
-  chartLine1(d3.select('#svg_d1'));
-  chartLine2(d3.select('#svg_d2'));
+  arcChart('d0');
+  chartLine1('d1');
+  chartLine2('d2');
 }
 
 function render() {
-  chartLine1(d3.select('#svg_d1'));
-  chartLine2(d3.select('#svg_d2'));
-
+  arcChart('d0');
+  chartLine1('d1');
+  chartLine2('d2');
 }
 
 function updateRender() {
   updateData();
-  arcDraw();
   render();
 }
 
-arcDraw(d3.select('#svg_d0'));
 prepSVG();
 updateData();
-setup();
 render();
 
 window.addEventListener('resize', render);

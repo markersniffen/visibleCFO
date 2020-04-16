@@ -1,52 +1,63 @@
-arcVar = {
-  startA: 140, // max angle of arc in degrees
-  rad: [ 95, 120, 152, 185, 220 ], // radius of elements
-  thick: [ 6, 0, 15, 1 ], // thickness of elements
-}
 
-function arcSetup() {
-  console.log('inside arcSetup', d_healthScore)
-  divVar = {
-    width: 400,
-    height: 250
+
+function arcChart(_svg) {
+
+  svg = d3.select(`#svg_${_svg}`);
+  let data = d_healthScore;
+
+  arcVar = {
+    startA: 140, // max angle of arc in degrees
+    rad: [ 95, 120, 152, 185, 220 ], // radius of elements
+    thick: [ 6, 0, 15, 1 ], // thickness of elements
   }
 
-  // create d0 svg element
-  const svg_arc = d3.select('#d0').append('svg')
-    .attr('id', 'd0_svg')
-    .attr('width', divVar.width)
-    .attr('height', divVar.height)
+  width = +svg.style('width').slice(0, -2),
+  height = +svg.style('height').slice(0, -2),
+  padLeft = 0,
+  padRight = 0,
+  padBottom = 10,
+  padTop = 70;
 
-  // creates translate group to center stuff
-  const arc_center = svg_arc.append('g')
-    .attr('transform', `translate(${divVar.width/2},${divVar.height/2})`)
-    .attr('id', 'arc_center');
+  innerWidth = width - padLeft - padRight;
+  innerHeight = height - padTop - padBottom;
+
+  // setup centered group
+  let center = svg.selectAll('#center').data([null])
+    .join('g')
+    .attr('id', 'center')
+    .attr('transform', `translate(${width/2},${height/2})`)
+
+  // setup layers
+  let bg = center.selectAll('#bg').data([null])
+    .join('g')
+    .attr('id', 'bg')
+
+  let layer1 = center.selectAll('#layer1').data([null])
+    .join('g')
+    .attr('id', 'layer1')
+
+  //const bg = svg.selectAll('.bg')
+  //const layer1 = svg.selectAll('.layer1')
 
   // add bg circle
-  arc_center.append('circle')
+  bg.selectAll('circle').data([null]).join('circle')
     .attr('r', 120)
     .style('fill', bc2)
 
   // empty arc
-  arc_center.append('path')
-  .attr('d', d3.arc()
-    .innerRadius(arcVar.rad[0] - arcVar.thick[0])
-    .outerRadius(arcVar.rad[0] + arcVar.thick[0])
-    .cornerRadius(10,)
-    .startAngle(-arcVar.startA * (Math.PI/180))
-    .endAngle(arcVar.startA * (Math.PI/180))
-  )
-  .style('fill', bc1)
+  bg.selectAll('path').data([null]).join('path')
+    .attr('d', d3.arc()
+        .innerRadius(arcVar.rad[0] - arcVar.thick[0])
+        .outerRadius(arcVar.rad[0] + arcVar.thick[0])
+        .cornerRadius(10)
+        .startAngle(-arcVar.startA * (Math.PI/180))
+        .endAngle(arcVar.startA * (Math.PI/180))
+      )
+    .style('fill', bc1)
 
-  
-}
-
-function arcDraw() {
-
-  let data = d_healthScore;
     
   let arcScale = d3.scaleLinear()
-    .domain([0, data[0].range])
+    .domain([0, data.range])
     .range ([-arcVar.startA, arcVar.startA]);
 
   let arc = d3.arc()
@@ -71,19 +82,47 @@ function arcDraw() {
     return function(t) { return arc(i(t)); };
   }
 
-  // create random data
+  // add main data text
+  mainText = layer1.selectAll('#mainArcData').data([data.value])
+    .join(
+      enter => enter
+      .append('text')
+      .attr('id', 'mainArcData')
+      .property('_current', data.value)
+      .text(Math.floor(data.value))
+      .attr('y', 23)
+      .style('opacity', 0)
+      .call(enter => enter
+        .transition(t)
+        .style('opacity', 100)
+        ),
+      update => update
+      .call(update => update
+        .transition(t)
+        .textTween(function(d) {
+          const i = d3.interpolate(this._current, d);
+          console.log(this._current)
+          return function(t) {return this._current = Math.floor(i(t))}
+        }
+        )
+      )
+    )
+    
+
+  mainArcTitle = layer1.selectAll('.mainArcTitle').data(['Business', 'Potential Soore'])
+    .join('text')
+    .attr('class', 'mainArcTitle')
+    .text(d => d)
+    .attr('y', (d, i) => i * 16 - 24 )
+
   
-  data.value = Math.random()*100;
-
-  let mainPathGroup = d3.select('#arc_center').selectAll('g').data([null])
-    .join('g')
-    .attr('id', 'mainPathGroup')
-
-  mainPath = mainPathGroup.selectAll('path')
+  // add main arc
+  mainPath = layer1.selectAll('#arcMainPath')
     .data([arcScale(data.value)])
     .join(
       enter => enter
         .append('path')   
+        .attr('id','arcMainPath')
         .style('fill', bc2)
       .call(enter => enter.transition().duration(500)
         .attrTween('d', arcTween2) // if I use arcTween2 this works
@@ -92,13 +131,12 @@ function arcDraw() {
       ),
       update => update
         .transition()
-        .duration(300)
+        .duration(200)
         .attrTween('d', arcTween)
         .style('fill', c1)     
       )
-
-  console.log(mainPath)
 }
+
 
 
 

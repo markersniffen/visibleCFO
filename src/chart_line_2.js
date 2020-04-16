@@ -1,9 +1,10 @@
 
 
 
-function chartLine2(svg) {
+function chartLine2(_svg) {
 
   // variables 
+  svg = d3.select(`#svg_${_svg}`);
   data = d_quarterlyRevenue;
 
   width = +svg.style('width').slice(0, -2),
@@ -16,25 +17,28 @@ function chartLine2(svg) {
   innerWidth = width - padLeft - padRight;
   innerHeight = height - padTop - padBottom;
 
+  
+
   // setup non-padded group
-  let g = svg.selectAll('g').data([null])
+  let g = svg.selectAll('#main').data([null])
     .join('g')
-    .attr('class', 'g')
+    .attr('id', 'main')
 
   // setup padded group
-  let pad = g.selectAll('g').data([null])
+  let pad = g.selectAll('#pad').data([null])
     .join('g')
-    .attr('class', 'pad')
+    .attr('id', 'pad')
     .attr('transform', `translate(${padLeft}, ${padTop})`)
 
   // setup layers
-  let layers = pad.selectAll('g').data(['bg', 'layer1', 'layer2'])
+  let layers = pad.selectAll('.layers').data(['bg', 'layer1', 'layer2'])
     .join('g')
-    .attr('class', d => d)
+    .attr('id', d => d)
+    .attr('class', 'layers')
 
-  const bg = svg.selectAll('.bg')
-  const layer1 = svg.selectAll('.layer1')
-  const layer2 = svg.selectAll('.layer2')
+  const bg = svg.select('#bg')
+  const layer1 = svg.select('#layer1')
+  const layer2 = svg.select('#layer2')
 
   // define scales
   const x = d3.scalePoint()
@@ -83,7 +87,8 @@ function chartLine2(svg) {
     .attr('y', padTop/2)
 
   // bottom axis
-  let xTicksBottom = bg.append('g')
+  let xTicksBottom = bg.selectAll('.tickBottom').data([null])
+    .join('g')
     .attr('class', 'tickBottom')
     .attr('transform', `translate(0,${innerHeight* .5})`)
     .call(xAxisBottom)
@@ -105,23 +110,38 @@ function chartLine2(svg) {
   // add data line
   let dataLine = bg.selectAll('.dataLine')
     .data([data])
-    .join('path')
-    .attr('class', 'dataLine')
-    .attr('d', mainLine)
-    .style('fill', 'none')
-    .style('stroke', c3)
-    .style('stroke-width', 2)
-
+    .join( enter => enter
+            .append('path')
+            .attr('d', mainLine)
+            .attr('class', 'dataLine')
+            .style('fill', 'none')
+            .style('stroke', c3)
+            .style('stroke-width', 2)
+          .call(enter => enter
+            .transition(t)
+            .attr('d', mainLine)
+            .style('stroke-width', 2)
+            ),
+          update => update  
+            .call(update => update
+              .transition(t)
+              .attr('d', mainLine)
+            )
+    )
+      
+      
+      
   // add data line
   let income1 = bg.selectAll('.lines')
-  .data([data])
-  .join('path')
-  .attr('id', 'incomeLine1')
-  .join('path')
-  .attr('d', secondLine)
-  .style('fill', 'none')
-  .style('stroke', 'white')
-  .style('stroke-width', 2)
+    .data([data])
+    .join('path')
+    .attr('class', 'lines')
+    .attr('id', 'incomeLine1')
+    .join('path')
+    .attr('d', secondLine)
+    .style('fill', 'none')
+    .style('stroke', 'white')
+    .style('stroke-width', 2)
 
   // let incomeMask1 = bg.selectAll('incomeLine1')
   //   .data([null])
@@ -134,26 +154,74 @@ function chartLine2(svg) {
     
 
 
+
   // add circles
   let circles = layer1.selectAll('circle')
     .data(data.filter(d => d.value > 500))
-    .join('circle')
-    .attr('cx', d => x(d.year))
-    .attr('cy', d => y(d.value))
-    .attr('r', 5)
-    .attr('fill', bc1)
-    .attr('stroke', 'white')
-    .attr('stroke-width', 2)
+    .join( enter => enter
+            .append('circle')
+            .attr('cx', d => x(d.year))
+            .attr('cy', d => y(d.value) - 100)
+            .attr('r', 0)
+            .attr('fill', bc1)
+            .attr('stroke', 'white')
+            .attr('stroke-width', 2)
+          .call(enter => enter
+            .transition(t)
+            .attr('r', 5)
+            .attr('cy', d => y(d.value))
+            ),
+          update => update
+          .call(update => update
+            .transition(t)
+            .attr('cx', d => x(d.year))
+            .attr('cy', d => y(d.value))
+            ),
+          exit => exit
+          .call( exit => exit
+            .transition(t)
+            .attr('r', 0)  
+            .attr('cy', -100)
+          )
+    )
 
   // add text in circles
-  let text = layer1.selectAll('.label2')
+  let text = layer1.selectAll('.label1')
     .data(data.filter(d => d.value > 500))
-    .join('text')
-    .text(d => d.value)
-    .attr('class', 'label2')
-    .attr('x', d => x(d.year))
-    .attr('y', d => y(d.value) + 15)
-    .style('text-align', 'center')
+    .join( enter => enter
+      .append('text')
+      .style('text-align', 'center')
+      .attr('class', 'label1')
+      .text(d => d.value)
+      .attr('x', d => x(d.year))
+      .attr('y', d => y(d.value) + 80)
+      .style('opacity', 0)
+      
+    .call(enter => enter
+      .transition(t)
+      .attr('y', d => y(d.value) + 15)
+      .style('opacity', 100)
+      ),
+    update => update
+    .call(update => update
+      .transition(t)
+      .text(d => d.value)
+      .attr('x', d => x(d.year))
+      .attr('y', d => y(d.value) + 15)
+      
+      ),
+    exit => exit
+    .call( exit => exit
+      .transition(t)
+      .attr('y', d => y(d.value) + 80)
+      .style('opacity', 0)
+    )
+    )
+      
+      
+      
+
+    
 
   // add text in circles
 let text2 = layer2.selectAll('.label2')
